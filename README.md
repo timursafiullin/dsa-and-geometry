@@ -9,6 +9,7 @@ This repository contains simple C++ implementations of common data structures an
 - [Singly linked list](include/data_structures/singly_linked_list.h)
 - [Doubly linked list](include/data_structures/doubly_linked_list.h)
 - [Queue](include/data_structures/queue.h)
+- [Stack](include/data_structures/stack.h)
 
 The shared [list node](include/data_structures/ListNode.h) implementation is now used by the linked lists and the queue.
 
