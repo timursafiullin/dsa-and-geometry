@@ -55,7 +55,7 @@ public:
 
     void add_at_tail(T val)
     {
-        ListNode<T>* newNode = new ListNode<T>(val, tail);
+        ListNode<T>* newNode = new ListNode<T>(val);
 
         if (tail == nullptr)
         {
@@ -63,6 +63,7 @@ public:
             return;
         }
 
+        newNode->pred = tail;
         tail->next = newNode;
         tail = newNode;
     }
@@ -84,8 +85,8 @@ public:
         if (cur == nullptr)
             throw std::out_of_range("Index out of range.");
 
-        ListNode<T>* newNode = new ListNode<T>(val, cur);
-        newNode->next = cur->next;
+        ListNode<T>* newNode = new ListNode<T>(val, cur->next);
+        newNode->pred = cur;
 
         if (cur->next != nullptr)
             cur->next->pred = newNode;
