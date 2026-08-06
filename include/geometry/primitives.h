@@ -4,6 +4,63 @@
 
 namespace dsa::geometry
 {
+    class vector2d
+    {
+    private:
+        double data[2];
+
+    public:
+        // Constructors
+        vector2d();
+        vector2d(double x, double y);
+        vector2d(const vector2d &other);
+
+        vector2d &operator=(const vector2d &other);
+
+        // Component access
+        double &x();
+        double &y();
+
+        const double &x() const;
+        const double &y() const;
+
+        // Indexed access
+        double &operator[](int index);
+        const double &operator[](int index) const;
+
+        // Arithmetic operations
+        vector2d operator+(const vector2d &other) const;
+        vector2d operator-(const vector2d &other) const;
+        vector2d operator*(double scalar) const;
+        vector2d operator/(double scalar) const;
+
+        vector2d &operator+=(const vector2d &other);
+        vector2d &operator-=(const vector2d &other);
+        vector2d &operator*=(double scalar);
+        vector2d &operator/=(double scalar);
+
+        vector2d operator-() const;
+
+        // Vector operations
+        double dot(const vector2d &other) const;
+        double cross(const vector2d &other) const;
+        double norm() const;
+        double squaredNorm() const;
+        vector2d normalized() const;
+        vector2d &normalize();
+
+        // Utility functions
+        bool isZero(double epsilon = 1e-10) const;
+        bool operator==(const vector2d &other) const;
+        bool operator!=(const vector2d &other) const;
+
+        // Stream output
+        friend std::ostream &operator<<(std::ostream &os, const vector2d &vec);
+    };
+
+    // Scalar multiplication
+    vector2d operator*(double scalar, const vector2d &vec);
+
     class vector3d
     {
     private:
