@@ -1,10 +1,10 @@
-#include "array.h"
+#include "../include/data_structures/array.h"
 
 #include <iostream>
 #include <stdexcept>
 #include <string>
 
-using namespace my;
+using namespace dsa;
 
 template<typename T, int SIZE>
 void printArray(const array<T, SIZE>& arr, const std::string& label)
@@ -28,7 +28,7 @@ int main()
 
     array<int, size> myarray;
 
-    std::cout << "=== my::array demo ===\n\n";
+    std::cout << "=== dsa::array demo ===\n\n";
 
     std::cout << "1. Fill array with 5\n";
     myarray.fill(5);

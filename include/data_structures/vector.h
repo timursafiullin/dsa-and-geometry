@@ -7,7 +7,7 @@
 
 #define _DEFAULT_CAPACITY 8
 
-namespace my
+namespace dsa
 {
 
 template<typename T>

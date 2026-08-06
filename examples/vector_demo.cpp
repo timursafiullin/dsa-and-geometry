@@ -1,11 +1,11 @@
-#include "vector.h"
+#include "../include/data_structures/vector.h"
 
 #include <iostream>
 #include <stdexcept>
 #include <string>
 #include <utility>
 
-using namespace my;
+using namespace dsa;
 
 template<typename T>
 void printVector(const vector<T>& values, const std::string& label)
@@ -26,7 +26,7 @@ void printVector(const vector<T>& values, const std::string& label)
 
 int main()
 {
-    std::cout << "=== my::vector demo ===\n\n";
+    std::cout << "=== dsa::vector demo ===\n\n";
 
     std::cout << "1. Create a vector from an initializer list\n";
     vector<int> numbers = {10, 20, 30};

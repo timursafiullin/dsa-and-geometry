@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-namespace my
+namespace dsa
 {
 
 template<typename T, int SIZE>
