@@ -16,6 +16,21 @@ namespace dsa::geometry
     class TriangleMesh
     {
     public:
+        TriangleMesh() = default;
+        TriangleMesh(
+            const std::vector<Point3>& vertices,
+            const std::vector<TriangleIndices>& triangles
+        );
+
+        const std::vector<Point3>& vertices() const;
+        const std::vector<TriangleIndices>& triangles() const;
+
+        const Point3& vertex(std::size_t index) const;
+        const TriangleIndices& triangle(std::size_t index) const;
+
+        VertexId addVertex(const Point3& vertex);
+        void addTriangle(const TriangleIndices& indices);
+
         std::size_t vertexCount() const noexcept;
         std::size_t triangleCount() const noexcept;
 

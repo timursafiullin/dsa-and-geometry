@@ -1,7 +1,49 @@
 #include "geometry/primitives/triangle_mesh.h"
 
+#include <limits>
+#include <stdexcept>
+
 namespace dsa::geometry
 {
+
+    TriangleMesh::TriangleMesh(
+        const std::vector<Point3>& vertices,
+        const std::vector<TriangleIndices>& triangles
+    ) : vertices_(vertices), triangles_(triangles) {}
+
+    const std::vector<Point3>& TriangleMesh::vertices() const
+    {
+        return vertices_;
+    }
+
+    const std::vector<TriangleIndices>& TriangleMesh::triangles() const
+    {
+        return triangles_;
+    }
+
+    const Point3& TriangleMesh::vertex(std::size_t index) const
+    {
+        return vertices_.at(index);
+    }
+
+    const TriangleIndices& TriangleMesh::triangle(std::size_t index) const
+    {
+        return triangles_.at(index);
+    }
+
+    VertexId TriangleMesh::addVertex(const Point3& vertex)
+    {
+        if (vertices_.size() > std::numeric_limits<VertexId>::max())
+            throw std::overflow_error("The mesh cannot contain more vertices.");
+
+        vertices_.push_back(vertex);
+        return static_cast<VertexId>(vertices_.size() - 1);
+    }
+
+    void TriangleMesh::addTriangle(const TriangleIndices& indices)
+    {
+        triangles_.push_back(indices);
+    }
 
     std::size_t TriangleMesh::vertexCount() const noexcept { return vertices_.size(); }
 
