@@ -41,6 +41,8 @@ namespace dsa::geometry
         friend std::ostream &operator<<(std::ostream &os, const Point2 &point);
     };
 
+    double distance(const Point2& a, const Point2& b);
+
     class Point3
     {
     private:
@@ -77,5 +79,7 @@ namespace dsa::geometry
 
         friend std::ostream &operator<<(std::ostream &os, const Point3 &point);
     };
+
+    double distance(const Point3& a, const Point3& b);
 
 } // namespace dsa::geometry

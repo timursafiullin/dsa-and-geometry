@@ -80,6 +80,8 @@ namespace dsa::geometry
         return os;
     }
 
+    double distance(const Point2& a, const Point2& b) { return a.distance(b); }
+
     // MARK: Point3
     Point3::Point3() : data{0.0, 0.0, 0.0} {}
 
@@ -167,5 +169,7 @@ namespace dsa::geometry
         os << "(" << point.data[0] << ", " << point.data[1] << ", " << point.data[2] << ")";
         return os;
     }
+
+    double distance(const Point3& a, const Point3& b) { return a.distance(b); }
 
 } // namespace dsa::geometry
