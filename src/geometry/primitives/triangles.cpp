@@ -1,4 +1,4 @@
-#include "geometry/primitives/triangle.h"
+#include "geometry/primitives/triangles.h"
 
 #include <cmath>
 

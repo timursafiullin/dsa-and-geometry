@@ -6,7 +6,7 @@ set(GEOMETRY_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/geometry/primitives/vectors.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/geometry/primitives/points.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/geometry/primitives/segments.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/geometry/primitives/triangle.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/geometry/primitives/triangles.cpp
 )
 
 add_library(${PROJECT_NAME} ${GEOMETRY_SOURCES})
