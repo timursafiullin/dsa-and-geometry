@@ -21,6 +21,15 @@ namespace dsa::geometry
 
     bool Triangle2::isDegenerate() const { return std::abs(signedDoubleArea()) < kEpsilon; }
 
+    double triangleArea(
+        const Point2& a,
+        const Point2& b,
+        const Point2& c
+    )
+    {
+        return std::abs((b - a).cross(c - a)) / 2.0;
+    }
+
     // MARK: Triangle3
     Triangle3::Triangle3(const Point3& a, const Point3& b, const Point3& c) : a_(a), b_(b), c_(c) {}
 
@@ -38,5 +47,14 @@ namespace dsa::geometry
     vector3d Triangle3::normal() const { return areaNormal().normalized(); }
 
     bool Triangle3::isDegenerate() const { return areaNormal().isZero(); }
+
+    double triangleArea(
+        const Point3& a,
+        const Point3& b,
+        const Point3& c
+    )
+    {
+        return (b - a).cross(c - a).norm() / 2.0;
+    }
 
 } // namespace dsa::geometry

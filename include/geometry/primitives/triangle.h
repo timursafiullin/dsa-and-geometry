@@ -33,6 +33,12 @@ namespace dsa::geometry
         Point2 c_;
     };
 
+    double triangleArea(
+        const Point2& a,
+        const Point2& b,
+        const Point2& c
+    );
+
     class Triangle3
     {
     public:
@@ -60,5 +66,11 @@ namespace dsa::geometry
         Point3 b_;
         Point3 c_;
     };
+
+    double triangleArea(
+        const Point3& a,
+        const Point3& b,
+        const Point3& c
+    );
 
 } // namespace dsa::geometry
