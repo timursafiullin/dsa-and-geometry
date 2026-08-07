@@ -15,13 +15,22 @@ The shared [list node](include/data_structures/ListNode.h) implementation is now
 
 ## Geometry module
 
-The `dsa::geometry` namespace contains the repository's geometry functionality. It currently includes the following 2D and 3D types and utilities:
+The `dsa::geometry` namespace contains 2D and 3D geometry primitives and algorithms.
+
+### Primitives
 
 - [Vectors](include/geometry/primitives/vectors.h): `vector2d` and `vector3d`, with arithmetic, dot and cross products, norms, and normalization
 - [Points](include/geometry/primitives/points.h): `Point2` and `Point3`, with vector translation and distance calculations
 - [Segments](include/geometry/primitives/segments.h): `Segment2` and `Segment3`, with direction, length, and interpolation through `pointAt(t)`
 - [Triangles](include/geometry/primitives/triangles.h): `Triangle2` and `Triangle3`, with area, edges, degeneracy checks, and 3D normals
 - [Triangle meshes](include/geometry/primitives/triangle_mesh.h): `TriangleMesh`, vertex/triangle counts, index validation, geometric validation, per-triangle area, and normals
+
+### Algorithms
+
+- [2D segments](include/geometry/algorithms/segment2.h): point-on-segment test, closest point, squared distance, and segment intersection
+- [3D segments](include/geometry/algorithms/segment3.h): point-on-segment test, closest point, squared distance, and intersection of coplanar or collinear segments; skew segments do not intersect
+- [2D triangles](include/geometry/algorithms/triangle2.h): barycentric coordinates and point-in-triangle test
+- [3D triangles](include/geometry/algorithms/triangle3.h): barycentric coordinates, point-in-triangle test, closest point on the triangle, and closest point on its boundary edges
 
 All geometry types use `double` coordinates. Segment interpolation accepts `t` in the inclusive range `[0, 1]`.
 
@@ -37,7 +46,7 @@ cmake --build build
 Include headers from `include/` and use the `dsa::geometry` namespace:
 
 ```cpp
-#include "geometry/primitives/triangles.h"
+#include "geometry/algorithms/triangle3.h"
 
 using namespace dsa::geometry;
 
@@ -49,6 +58,7 @@ Triangle3 triangle{
 
 double area = triangle.area();
 vector3d normal = triangle.normal();
+Point3 closest = closestPointOnTriangle(Point3{0.8, 0.8, 1.0}, triangle);
 ```
 
 The collection is gradually expanding.
