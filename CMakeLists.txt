@@ -5,6 +5,7 @@ project(dsa-studying VERSION 0.0.1 LANGUAGES CXX)
 set(GEOMETRY_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/geometry/predicates.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/geometry/algorithms/segment2.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/geometry/algorithms/triangle2.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/geometry/primitives/vectors.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/geometry/primitives/points.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/geometry/primitives/segments.cpp
