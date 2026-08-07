@@ -45,7 +45,7 @@ namespace dsa::geometry
         vector2d normalized() const;
         vector2d &normalize();
 
-        bool isZero(double epsilon = kEpsilon) const;
+        bool isZero(double linearEpsilon = kLinearEpsilon) const;
         bool operator==(const vector2d &other) const;
         bool operator!=(const vector2d &other) const;
 
@@ -92,7 +92,7 @@ namespace dsa::geometry
         vector3d normalized() const;
         vector3d &normalize();
 
-        bool isZero(double epsilon = kEpsilon) const;
+        bool isZero(double linearEpsilon = kLinearEpsilon) const;
         bool operator==(const vector3d &other) const;
         bool operator!=(const vector3d &other) const;
 

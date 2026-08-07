@@ -19,7 +19,12 @@ namespace dsa::geometry
 
     double Triangle2::area() const { return std::abs(signedDoubleArea()) / 2.0; }
 
-    bool Triangle2::isDegenerate() const { return std::abs(signedDoubleArea()) < kEpsilon; }
+    bool Triangle2::isDegenerate(double relativeEpsilon) const
+    {
+        const vector2d ab = edgeAB();
+        const vector2d ac = edgeAC();
+        return std::abs(ab.cross(ac)) <= relativeEpsilon * ab.norm() * ac.norm();
+    }
 
     double triangleArea(
         const Point2& a,
@@ -46,7 +51,12 @@ namespace dsa::geometry
 
     vector3d Triangle3::normal() const { return areaNormal().normalized(); }
 
-    bool Triangle3::isDegenerate() const { return areaNormal().isZero(); }
+    bool Triangle3::isDegenerate(double relativeEpsilon) const
+    {
+        const vector3d ab = edgeAB();
+        const vector3d ac = edgeAC();
+        return areaNormal().norm() <= relativeEpsilon * ab.norm() * ac.norm();
+    }
 
     double triangleArea(
         const Point3& a,

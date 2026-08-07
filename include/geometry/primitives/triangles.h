@@ -1,5 +1,6 @@
 #pragma once
 
+#include "geometry/constants.h"
 #include "geometry/primitives/vectors.h"
 #include "geometry/primitives/points.h"
 
@@ -25,7 +26,8 @@ namespace dsa::geometry
         double signedDoubleArea() const;
         double area() const;
 
-        bool isDegenerate() const;
+        // relativeEpsilon bounds the sine of the angle between the edges.
+        bool isDegenerate(double relativeEpsilon = kRelativeEpsilon) const;
 
     private:
         Point2 a_;
@@ -59,7 +61,8 @@ namespace dsa::geometry
         double area() const;
         vector3d normal() const;
 
-        bool isDegenerate() const;
+        // relativeEpsilon bounds the sine of the angle between the edges.
+        bool isDegenerate(double relativeEpsilon = kRelativeEpsilon) const;
 
     private:
         Point3 a_;

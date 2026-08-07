@@ -9,11 +9,11 @@
 namespace dsa::geometry
 {
 
-    // Returns whether point is within epsilon distance of segment.
+    // Returns whether point is within linearEpsilon distance of segment.
     bool isPointOnSegment(
         const Point2& point,
         const Segment2& segment,
-        double epsilon = kEpsilon
+        double linearEpsilon = kLinearEpsilon
     );
 
     Point2 closestPointOnSegment(
@@ -35,7 +35,7 @@ namespace dsa::geometry
     SegmentIntersection2 intersect(
         const Segment2& first,
         const Segment2& second,
-        double epsilon = kEpsilon
+        double linearEpsilon = kLinearEpsilon
     );
 
 } // namespace dsa::geometry
