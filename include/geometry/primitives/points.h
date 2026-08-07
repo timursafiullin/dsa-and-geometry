@@ -1,6 +1,7 @@
 #pragma once
 
 #include "geometry/primitives/vectors.h"
+
 #include <iosfwd>
 
 namespace dsa::geometry
