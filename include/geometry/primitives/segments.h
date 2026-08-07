@@ -40,4 +40,4 @@ namespace dsa::geometry
         Point3 end_;
     };
 
-}
+} // namespace dsa::geometry

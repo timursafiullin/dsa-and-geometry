@@ -4,6 +4,7 @@
 
 namespace dsa::geometry
 {
+
     class vector2d
     {
     private:
@@ -97,4 +98,5 @@ namespace dsa::geometry
     };
 
     vector3d operator*(double scalar, const vector3d &vec);
-}
+
+} // namespace dsa::geometry

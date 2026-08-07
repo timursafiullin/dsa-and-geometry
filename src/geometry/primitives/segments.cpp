@@ -4,6 +4,7 @@
 
 namespace dsa::geometry
 {
+
     // MARK: Segment2
     Segment2::Segment2(const Point2& start, const Point2& end) : start_(start), end_(end) {}
 
@@ -40,4 +41,4 @@ namespace dsa::geometry
         return Point3(a.x() + (b.x() - a.x()) * t, a.y() + (b.y() - a.y()) * t, a.z() + (b.z() - a.z()) * t);
     }
 
-}
+} // namespace dsa::geometry

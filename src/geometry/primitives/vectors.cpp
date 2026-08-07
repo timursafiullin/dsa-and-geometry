@@ -5,7 +5,7 @@
 
 namespace dsa::geometry
 {
-    // Constructors
+    // MARK: vector2d
     vector2d::vector2d() : data{0.0, 0.0} {}
 
     vector2d::vector2d(double x, double y) : data{x, y} {}
@@ -22,14 +22,12 @@ namespace dsa::geometry
         return *this;
     }
 
-    // Component access
     double &vector2d::x() { return data[0]; }
     double &vector2d::y() { return data[1]; }
 
     const double &vector2d::x() const { return data[0]; }
     const double &vector2d::y() const { return data[1]; }
 
-    // Indexed access
     double &vector2d::operator[](int index)
     {
         if (index < 0 || index > 1)
@@ -48,23 +46,17 @@ namespace dsa::geometry
         return data[index];
     }
 
-    // Arithmetic operations
     vector2d vector2d::operator+(const vector2d &other) const
     {
-        return vector2d(data[0] + other.data[0],
-                        data[1] + other.data[1]);
+        return vector2d(data[0] + other.data[0], data[1] + other.data[1]);
     }
 
     vector2d vector2d::operator-(const vector2d &other) const
     {
-        return vector2d(data[0] - other.data[0],
-                        data[1] - other.data[1]);
+        return vector2d(data[0] - other.data[0], data[1] - other.data[1]);
     }
 
-    vector2d vector2d::operator*(double scalar) const
-    {
-        return vector2d(data[0] * scalar, data[1] * scalar);
-    }
+    vector2d vector2d::operator*(double scalar) const { return vector2d(data[0] * scalar, data[1] * scalar); }
 
     vector2d vector2d::operator/(double scalar) const
     {
@@ -75,7 +67,6 @@ namespace dsa::geometry
         return vector2d(data[0] / scalar, data[1] / scalar);
     }
 
-    // Compound assignment operators
     vector2d &vector2d::operator+=(const vector2d &other)
     {
         data[0] += other.data[0];
@@ -108,32 +99,15 @@ namespace dsa::geometry
         return *this;
     }
 
-    // Unary operators
-    vector2d vector2d::operator-() const
-    {
-        return vector2d(-data[0], -data[1]);
-    }
+    vector2d vector2d::operator-() const { return vector2d(-data[0], -data[1]); }
 
-    // Mathematical operations
-    double vector2d::dot(const vector2d &other) const
-    {
-        return data[0] * other.data[0] + data[1] * other.data[1];
-    }
+    double vector2d::dot(const vector2d &other) const { return data[0] * other.data[0] + data[1] * other.data[1]; }
 
-    double vector2d::cross(const vector2d &other) const
-    {
-        return data[0] * other.data[1] - data[1] * other.data[0];
-    }
+    double vector2d::cross(const vector2d &other) const { return data[0] * other.data[1] - data[1] * other.data[0]; }
 
-    double vector2d::norm() const
-    {
-        return std::sqrt(squaredNorm());
-    }
+    double vector2d::norm() const { return std::sqrt(squaredNorm()); }
 
-    double vector2d::squaredNorm() const
-    {
-        return data[0] * data[0] + data[1] * data[1];
-    }
+    double vector2d::squaredNorm() const { return data[0] * data[0] + data[1] * data[1]; }
 
     vector2d vector2d::normalized() const
     {
@@ -156,36 +130,24 @@ namespace dsa::geometry
         return *this;
     }
 
-    // Utility functions
-    bool vector2d::isZero(double epsilon) const
-    {
-        return squaredNorm() < epsilon;
-    }
+    bool vector2d::isZero(double epsilon) const { return squaredNorm() < epsilon; }
 
     bool vector2d::operator==(const vector2d &other) const
     {
         return data[0] == other.data[0] && data[1] == other.data[1];
     }
 
-    bool vector2d::operator!=(const vector2d &other) const
-    {
-        return !(*this == other);
-    }
+    bool vector2d::operator!=(const vector2d &other) const { return !(*this == other); }
 
-    // Stream output
     std::ostream &operator<<(std::ostream &os, const vector2d &vec)
     {
         os << "(" << vec.data[0] << ", " << vec.data[1] << ")";
         return os;
     }
 
-    // Scalar multiplication
-    vector2d operator*(double scalar, const vector2d &vec)
-    {
-        return vec * scalar;
-    }
+    vector2d operator*(double scalar, const vector2d &vec) { return vec * scalar; }
 
-    // Constructors
+    // MARK: vector3d
     vector3d::vector3d() : data{0.0, 0.0, 0.0} {}
 
     vector3d::vector3d(double x, double y, double z) : data{x, y, z} {}
@@ -203,7 +165,6 @@ namespace dsa::geometry
         return *this;
     }
 
-    // Component access
     double &vector3d::x() { return data[0]; }
     double &vector3d::y() { return data[1]; }
     double &vector3d::z() { return data[2]; }
@@ -212,7 +173,6 @@ namespace dsa::geometry
     const double &vector3d::y() const { return data[1]; }
     const double &vector3d::z() const { return data[2]; }
 
-    // Indexed access
     double &vector3d::operator[](int index)
     {
         if (index < 0 || index > 2)
@@ -231,26 +191,19 @@ namespace dsa::geometry
         return data[index];
     }
 
-    // Arithmetic operations
     vector3d vector3d::operator+(const vector3d &other) const
     {
-        return vector3d(data[0] + other.data[0],
-                        data[1] + other.data[1],
-                        data[2] + other.data[2]);
+        return vector3d(data[0] + other.data[0], data[1] + other.data[1], data[2] + other.data[2]);
     }
 
     vector3d vector3d::operator-(const vector3d &other) const
     {
-        return vector3d(data[0] - other.data[0],
-                        data[1] - other.data[1],
-                        data[2] - other.data[2]);
+        return vector3d(data[0] - other.data[0], data[1] - other.data[1], data[2] - other.data[2]);
     }
 
     vector3d vector3d::operator*(double scalar) const
     {
-        return vector3d(data[0] * scalar,
-                        data[1] * scalar,
-                        data[2] * scalar);
+        return vector3d(data[0] * scalar, data[1] * scalar, data[2] * scalar);
     }
 
     vector3d vector3d::operator/(double scalar) const
@@ -259,12 +212,9 @@ namespace dsa::geometry
         {
             throw std::invalid_argument("Division by zero");
         }
-        return vector3d(data[0] / scalar,
-                        data[1] / scalar,
-                        data[2] / scalar);
+        return vector3d(data[0] / scalar, data[1] / scalar, data[2] / scalar);
     }
 
-    // Compound assignment operators
     vector3d &vector3d::operator+=(const vector3d &other)
     {
         data[0] += other.data[0];
@@ -301,41 +251,23 @@ namespace dsa::geometry
         return *this;
     }
 
-    // Unary operators
-    vector3d vector3d::operator-() const
-    {
-        return vector3d(-data[0], -data[1], -data[2]);
-    }
+    vector3d vector3d::operator-() const { return vector3d(-data[0], -data[1], -data[2]); }
 
-    // Mathematical operations
     double vector3d::dot(const vector3d &other) const
     {
-        return data[0] * other.data[0] +
-               data[1] * other.data[1] +
-               data[2] * other.data[2];
+        return data[0] * other.data[0] + data[1] * other.data[1] + data[2] * other.data[2];
     }
 
     vector3d vector3d::cross(const vector3d &other) const
     {
-        return vector3d(
-            data[1] * other.data[2] - data[2] * other.data[1],
-            data[2] * other.data[0] - data[0] * other.data[2],
-            data[0] * other.data[1] - data[1] * other.data[0]);
+        return vector3d(data[1] * other.data[2] - data[2] * other.data[1],
+                        data[2] * other.data[0] - data[0] * other.data[2],
+                        data[0] * other.data[1] - data[1] * other.data[0]);
     }
 
-    double vector3d::norm() const
-    {
-        return std::sqrt(data[0] * data[0] +
-                         data[1] * data[1] +
-                         data[2] * data[2]);
-    }
+    double vector3d::norm() const { return std::sqrt(data[0] * data[0] + data[1] * data[1] + data[2] * data[2]); }
 
-    double vector3d::squaredNorm() const
-    {
-        return data[0] * data[0] +
-               data[1] * data[1] +
-               data[2] * data[2];
-    }
+    double vector3d::squaredNorm() const { return data[0] * data[0] + data[1] * data[1] + data[2] * data[2]; }
 
     vector3d vector3d::normalized() const
     {
@@ -358,34 +290,21 @@ namespace dsa::geometry
         return *this;
     }
 
-    // Utility functions
-    bool vector3d::isZero(double epsilon) const
-    {
-        return squaredNorm() < epsilon;
-    }
+    bool vector3d::isZero(double epsilon) const { return squaredNorm() < epsilon; }
 
     bool vector3d::operator==(const vector3d &other) const
     {
-        return data[0] == other.data[0] &&
-               data[1] == other.data[1] &&
-               data[2] == other.data[2];
+        return data[0] == other.data[0] && data[1] == other.data[1] && data[2] == other.data[2];
     }
 
-    bool vector3d::operator!=(const vector3d &other) const
-    {
-        return !(*this == other);
-    }
+    bool vector3d::operator!=(const vector3d &other) const { return !(*this == other); }
 
-    // Stream output
     std::ostream &operator<<(std::ostream &os, const vector3d &vec)
     {
         os << "(" << vec.data[0] << ", " << vec.data[1] << ", " << vec.data[2] << ")";
         return os;
     }
 
-    // Scalar multiplication
-    vector3d operator*(double scalar, const vector3d &vec)
-    {
-        return vec * scalar;
-    }
-}
+    vector3d operator*(double scalar, const vector3d &vec) { return vec * scalar; }
+
+} // namespace dsa::geometry
