@@ -1,5 +1,7 @@
 #pragma once
 
+#include "geometry/constants.h"
+
 #include <iosfwd>
 
 namespace dsa::geometry
@@ -43,7 +45,7 @@ namespace dsa::geometry
         vector2d normalized() const;
         vector2d &normalize();
 
-        bool isZero(double epsilon = 1e-10) const;
+        bool isZero(double epsilon = kEpsilon) const;
         bool operator==(const vector2d &other) const;
         bool operator!=(const vector2d &other) const;
 
@@ -90,7 +92,7 @@ namespace dsa::geometry
         vector3d normalized() const;
         vector3d &normalize();
 
-        bool isZero(double epsilon = 1e-9) const;
+        bool isZero(double epsilon = kEpsilon) const;
         bool operator==(const vector3d &other) const;
         bool operator!=(const vector3d &other) const;
 

@@ -130,7 +130,7 @@ namespace dsa::geometry
         return *this;
     }
 
-    bool vector2d::isZero(double epsilon) const { return squaredNorm() < epsilon; }
+    bool vector2d::isZero(double epsilon) const { return norm() < epsilon; }
 
     bool vector2d::operator==(const vector2d &other) const
     {
@@ -290,7 +290,7 @@ namespace dsa::geometry
         return *this;
     }
 
-    bool vector3d::isZero(double epsilon) const { return squaredNorm() < epsilon; }
+    bool vector3d::isZero(double epsilon) const { return norm() < epsilon; }
 
     bool vector3d::operator==(const vector3d &other) const
     {
