@@ -1,10 +1,12 @@
 #include "geometry/algorithms/triangle2.h"
 #include "geometry/algorithms/triangle3.h"
+#include "geometry/algorithms/segment3.h"
 #include "geometry/primitives/triangles.h"
 
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <variant>
 
 using namespace dsa::geometry;
 
@@ -14,6 +16,13 @@ namespace
     bool isNearlyEqual(double lhs, double rhs)
     {
         return std::abs(lhs - rhs) <= kBarycentricEpsilon;
+    }
+
+    bool isNearlyEqual(const Point3& point, const Point3& expected)
+    {
+        return isNearlyEqual(point.x(), expected.x()) &&
+               isNearlyEqual(point.y(), expected.y()) &&
+               isNearlyEqual(point.z(), expected.z());
     }
 
 } // namespace
@@ -74,6 +83,54 @@ int main()
     assert(!barycentricCoordinates(Point3{0.25, 0.25, 0.1}, triangle3).has_value());
     assert(!isPointInTriangle(Point3{0.25, 0.25, 0.1}, triangle3));
 
+    const Segment3 horizontal{Point3{0.0, 0.0, 0.0}, Point3{2.0, 0.0, 0.0}};
+    assert(isPointOnSegment(Point3{1.0, 0.0, 0.0}, horizontal));
+    assert(!isPointOnSegment(Point3{1.0, 0.0, 0.1}, horizontal));
+    assert(isNearlyEqual(
+        closestPointOnSegment(Point3{1.0, 2.0, 3.0}, horizontal),
+        Point3{1.0, 0.0, 0.0}
+    ));
+    assert(isNearlyEqual(squaredDistanceToSegment(Point3{1.0, 2.0, 3.0}, horizontal), 13.0));
+
+    const SegmentIntersection3 crossing = intersect(
+        horizontal,
+        Segment3{Point3{1.0, -1.0, 0.0}, Point3{1.0, 1.0, 0.0}}
+    );
+    assert(std::holds_alternative<Point3>(crossing));
+    assert(isNearlyEqual(std::get<Point3>(crossing), Point3{1.0, 0.0, 0.0}));
+
+    const SegmentIntersection3 skew = intersect(
+        horizontal,
+        Segment3{Point3{1.0, -1.0, 1.0}, Point3{1.0, 1.0, 1.0}}
+    );
+    assert(std::holds_alternative<std::monostate>(skew));
+
+    const SegmentIntersection3 overlap = intersect(
+        horizontal,
+        Segment3{Point3{1.0, 0.0, 0.0}, Point3{3.0, 0.0, 0.0}}
+    );
+    assert(std::holds_alternative<Segment3>(overlap));
+    const Segment3& overlapSegment = std::get<Segment3>(overlap);
+    assert(isNearlyEqual(overlapSegment.start(), Point3{1.0, 0.0, 0.0}));
+    assert(isNearlyEqual(overlapSegment.end(), Point3{2.0, 0.0, 0.0}));
+
+    assert(isNearlyEqual(
+        closestPointOnTriangle(Point3{0.25, 0.25, 2.0}, triangle3),
+        Point3{0.25, 0.25, 0.0}
+    ));
+    assert(isNearlyEqual(
+        closestPointOnEdges(Point3{0.25, 0.25, 2.0}, triangle3),
+        Point3{0.25, 0.0, 0.0}
+    ));
+    assert(isNearlyEqual(
+        closestPointOnTriangle(Point3{0.8, 0.8, 2.0}, triangle3),
+        Point3{0.5, 0.5, 0.0}
+    ));
+    assert(isNearlyEqual(
+        closestPointOnTriangle(Point3{-1.0, -1.0, 2.0}, triangle3),
+        triangle3.a()
+    ));
+
     Triangle2 flat{Point2{0.0, 0.0}, Point2{1.0, 1.0}, Point2{2.0, 2.0}};
     std::cout << "\nCollinear triangle is degenerate = " << flat.isDegenerate() << '\n';
 
@@ -87,8 +144,12 @@ int main()
     };
     assert(!barycentricCoordinates(Point3{1.0, 0.0, 0.0}, flat3).has_value());
     assert(!isPointInTriangle(Point3{1.0, 0.0, 0.0}, flat3));
+    assert(isNearlyEqual(
+        closestPointOnTriangle(Point3{1.5, 2.0, 0.0}, flat3),
+        Point3{1.5, 0.0, 0.0}
+    ));
 
-    std::cout << "Barycentric-coordinate checks passed.\n";
+    std::cout << "Triangle and segment checks passed.\n";
 
     return 0;
 }

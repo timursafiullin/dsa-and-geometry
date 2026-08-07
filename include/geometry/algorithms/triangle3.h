@@ -34,4 +34,16 @@ namespace dsa::geometry
         double planeEpsilon = kLinearEpsilon
     );
 
+    // Returns the nearest point on one of the triangle's three edges.
+    Point3 closestPointOnEdges(
+        const Point3& point,
+        const Triangle3& triangle
+    );
+
+    // Returns the nearest point on triangle.
+    Point3 closestPointOnTriangle(
+        const Point3& point,
+        const Triangle3& triangle
+    );
+
 } // namespace dsa::geometry

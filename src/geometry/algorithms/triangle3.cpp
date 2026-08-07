@@ -1,4 +1,5 @@
 #include "geometry/algorithms/triangle3.h"
+#include "geometry/algorithms/segment3.h"
 
 #include <cmath>
 
@@ -50,6 +51,55 @@ namespace dsa::geometry
         return bCoords.l0 >= -barycentricEpsilon &&
                bCoords.l1 >= -barycentricEpsilon &&
                bCoords.l2 >= -barycentricEpsilon;
+    }
+
+    Point3 closestPointOnEdges(
+        const Point3& point,
+        const Triangle3& triangle
+    )
+    {
+        Point3 closest = closestPointOnSegment(
+            point, Segment3{triangle.a(), triangle.b()});
+        double closestSquaredDistance = point.squaredDistance(closest);
+
+        const Point3 onBC = closestPointOnSegment(
+            point, Segment3{triangle.b(), triangle.c()});
+        const double squaredDistanceToBC = point.squaredDistance(onBC);
+        if (squaredDistanceToBC < closestSquaredDistance)
+        {
+            closest = onBC;
+            closestSquaredDistance = squaredDistanceToBC;
+        }
+
+        const Point3 onCA = closestPointOnSegment(
+            point, Segment3{triangle.c(), triangle.a()});
+        if (point.squaredDistance(onCA) < closestSquaredDistance)
+            closest = onCA;
+
+        return closest;
+    }
+
+    Point3 closestPointOnTriangle(
+        const Point3& point,
+        const Triangle3& triangle
+    )
+    {
+        const vector3d normal = triangle.areaNormal();
+        const double normalSquaredNorm = normal.squaredNorm();
+
+        // A plane is undefined for a degenerate triangle, so its edges are
+        // the available geometric support.
+        if (normalSquaredNorm == 0.0)
+            return closestPointOnEdges(point, triangle);
+
+        const vector3d pointFromA = point - triangle.a();
+        const Point3 projection =
+            point - normal * (pointFromA.dot(normal) / normalSquaredNorm);
+
+        if (isPointInTriangle(projection, triangle))
+            return projection;
+
+        return closestPointOnEdges(point, triangle);
     }
 
 } // namespace dsa::geometry
