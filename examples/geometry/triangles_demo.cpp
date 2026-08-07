@@ -1,4 +1,5 @@
 #include "geometry/algorithms/triangle2.h"
+#include "geometry/algorithms/triangle3.h"
 #include "geometry/primitives/triangles.h"
 
 #include <cassert>
@@ -59,11 +60,33 @@ int main()
     std::cout << "  unit normal = " << triangle3.normal() << '\n';
     std::cout << "  area = " << triangle3.area() << '\n';
 
+    const Point3 insidePoint3{0.25, 0.25, 0.0};
+    const std::optional<BarycentricCoordinates3> insideCoordinates3 =
+        barycentricCoordinates(insidePoint3, triangle3);
+
+    assert(insideCoordinates3.has_value());
+    assert(isNearlyEqual(insideCoordinates3->l0, 0.5));
+    assert(isNearlyEqual(insideCoordinates3->l1, 0.25));
+    assert(isNearlyEqual(insideCoordinates3->l2, 0.25));
+    assert(isPointInTriangle(insidePoint3, triangle3));
+    assert(isPointInTriangle(triangle3.a(), triangle3));
+    assert(!isPointInTriangle(Point3{1.0, 1.0, 0.0}, triangle3));
+    assert(!barycentricCoordinates(Point3{0.25, 0.25, 0.1}, triangle3).has_value());
+    assert(!isPointInTriangle(Point3{0.25, 0.25, 0.1}, triangle3));
+
     Triangle2 flat{Point2{0.0, 0.0}, Point2{1.0, 1.0}, Point2{2.0, 2.0}};
     std::cout << "\nCollinear triangle is degenerate = " << flat.isDegenerate() << '\n';
 
     assert(!barycentricCoordinates(Point2{1.0, 1.0}, flat).has_value());
     assert(!isPointInTriangle(Point2{1.0, 1.0}, flat));
+
+    const Triangle3 flat3{
+        Point3{0.0, 0.0, 0.0},
+        Point3{1.0, 0.0, 0.0},
+        Point3{2.0, 0.0, 0.0},
+    };
+    assert(!barycentricCoordinates(Point3{1.0, 0.0, 0.0}, flat3).has_value());
+    assert(!isPointInTriangle(Point3{1.0, 0.0, 0.0}, flat3));
 
     std::cout << "Barycentric-coordinate checks passed.\n";
 
