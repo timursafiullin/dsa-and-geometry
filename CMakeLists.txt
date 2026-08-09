@@ -24,6 +24,8 @@ set(GEOMETRY_SOURCES
     # Topology
     ${CMAKE_CURRENT_SOURCE_DIR}/src/geometry/topology/edge.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/geometry/topology/triangle_topology.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/geometry/topology/half_edge_topology.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/geometry/topology/boundary.cpp
 )
 
 add_library(${PROJECT_NAME} ${GEOMETRY_SOURCES})

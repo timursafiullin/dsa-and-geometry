@@ -1,5 +1,7 @@
 #include "geometry/primitives/triangle_mesh.h"
+#include "geometry/topology/boundary.h"
 #include "geometry/topology/edge.h"
+#include "geometry/topology/half_edge_topology.h"
 #include "geometry/topology/triangle_topology.h"
 
 #include <algorithm>
@@ -102,6 +104,42 @@ namespace
         assert(topology.incidentTriangles(bottomRight) == std::vector<TriangleId>{lowerRight});
         assert((topology.incidentTriangles(topRight) == std::vector<TriangleId>{lowerRight, upperLeft}));
         assert(topology.incidentTriangles(topLeft) == std::vector<TriangleId>{upperLeft});
+
+        const HalfEdgeTopology halfEdges = buildHalfEdgeTopology(square, topology);
+
+        const HalfEdgeId lowerRightDiagonal = 3 * lowerRight + 2;
+        const HalfEdgeId upperLeftDiagonal = 3 * upperLeft;
+
+        assert(halfEdges.halfEdgeCount() == 6);
+        assert(halfEdges.triangle(lowerRightDiagonal) == lowerRight);
+        assert(halfEdges.localEdge(lowerRightDiagonal) == 2);
+        assert(halfEdges.edge(lowerRightDiagonal) == diagonal);
+        assert(halfEdges.next(lowerRightDiagonal) == 3 * lowerRight);
+        assert(halfEdges.previous(lowerRightDiagonal) == 3 * lowerRight + 1);
+        assert(halfEdges.twin(lowerRightDiagonal) == upperLeftDiagonal);
+        assert(halfEdges.twin(upperLeftDiagonal) == lowerRightDiagonal);
+        assert(halfEdges.hasTwin(lowerRightDiagonal));
+        assert(!halfEdges.isBoundary(lowerRightDiagonal));
+        assert(halfEdges.origin(square, lowerRightDiagonal) == topRight);
+        assert(halfEdges.destination(square, lowerRightDiagonal) == bottomLeft);
+
+        const HalfEdgeId firstBoundaryHalfEdge = 3 * lowerRight;
+        assert(halfEdges.isBoundary(firstBoundaryHalfEdge));
+        assert(halfEdges.nextBoundary(firstBoundaryHalfEdge) == 3 * lowerRight + 1);
+
+        const std::vector<BoundaryLoop> loops = extractBoundaryLoops(square, halfEdges);
+
+        assert(loops.size() == 1);
+        assert(loops.front().closed);
+        assert((loops.front().vertices ==
+                std::vector<VertexId>{bottomLeft, bottomRight, topRight, topLeft}));
+        assert((loops.front().edges ==
+                std::vector<EdgeId>{
+                    findEdgeId(topology, Edge{bottomLeft, bottomRight}),
+                    findEdgeId(topology, Edge{bottomRight, topRight}),
+                    findEdgeId(topology, Edge{topRight, topLeft}),
+                    findEdgeId(topology, Edge{topLeft, bottomLeft})
+                }));
     }
 
     void verifyNonManifoldTopology()
@@ -131,6 +169,46 @@ namespace
         assert(topology.triangleNeighbors(firstTriangle)[0] == InvalidTriangleId);
         assert(topology.triangleNeighbors(secondTriangle)[0] == InvalidTriangleId);
         assert(topology.triangleNeighbors(thirdTriangle)[0] == InvalidTriangleId);
+
+        bool rejectedNonManifoldHalfEdgeTopology = false;
+        try
+        {
+            [[maybe_unused]] const HalfEdgeTopology halfEdges =
+                buildHalfEdgeTopology(mesh, topology);
+        }
+        catch (const std::invalid_argument&)
+        {
+            rejectedNonManifoldHalfEdgeTopology = true;
+        }
+        assert(rejectedNonManifoldHalfEdgeTopology);
+    }
+
+    void verifyInconsistentOrientationIsRejected()
+    {
+        const TriangleMesh square{
+            {
+                Point3{0.0, 0.0, 0.0}, Point3{1.0, 0.0, 0.0},
+                Point3{1.0, 1.0, 0.0}, Point3{0.0, 1.0, 0.0}
+            },
+            {
+                TriangleIndices{0, 1, 2},
+                TriangleIndices{2, 0, 3}
+            }
+        };
+
+        const TriangleTopology topology = buildTriangleTopology(square);
+
+        bool rejectedInconsistentOrientation = false;
+        try
+        {
+            [[maybe_unused]] const HalfEdgeTopology halfEdges =
+                buildHalfEdgeTopology(square, topology);
+        }
+        catch (const std::invalid_argument&)
+        {
+            rejectedInconsistentOrientation = true;
+        }
+        assert(rejectedInconsistentOrientation);
     }
 
     void verifyIcosahedronTopology()
@@ -171,6 +249,20 @@ namespace
         assert(topology.vertexCount() - topology.edgeCount() + topology.triangleCount() == 2);
         assert(topology.isManifold());
         assert(topology.nonManifoldEdges().empty());
+
+        const HalfEdgeTopology halfEdges = buildHalfEdgeTopology(icosahedron, topology);
+        assert(halfEdges.halfEdgeCount() == 60);
+
+        for (HalfEdgeId halfEdge = 0; halfEdge < halfEdges.halfEdgeCount(); ++halfEdge)
+        {
+            assert(halfEdges.hasTwin(halfEdge));
+            assert(!halfEdges.isBoundary(halfEdge));
+            assert(halfEdges.twin(halfEdges.twin(halfEdge)) == halfEdge);
+            assert(halfEdges.destination(icosahedron, halfEdge) ==
+                   halfEdges.origin(icosahedron, halfEdges.twin(halfEdge)));
+        }
+
+        assert(extractBoundaryLoops(icosahedron, halfEdges).empty());
 
         for (VertexId vertexId = 0; vertexId < topology.vertexCount(); ++vertexId)
             assert(topology.incidentTriangles(vertexId).size() == 5);
@@ -229,6 +321,7 @@ int main()
     verifyEdge();
     verifyManifoldTopology();
     verifyNonManifoldTopology();
+    verifyInconsistentOrientationIsRejected();
     verifyIcosahedronTopology();
     verifyInvalidMeshIsRejected();
 
