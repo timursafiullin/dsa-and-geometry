@@ -30,12 +30,26 @@ GEOX is a C++ geometry library. The `geox` namespace provides 2D and 3D primitiv
 
 ## Build
 
-The project builds a C++17 library named `geox`:
+The project builds a C++17 library named `geox`. Examples and tests are
+separate optional targets:
 
 ```sh
 cmake -S . -B build
 cmake --build build
+ctest --test-dir build --output-on-failure
 ```
+
+For multi-configuration generators, add `-C Debug` to the `ctest` command.
+
+```sh
+cmake -S . -B build-library -DGEOX_BUILD_EXAMPLES=OFF -DGEOX_BUILD_TESTS=OFF
+cmake -S . -B build-tests -DGEOX_BUILD_EXAMPLES=OFF -DGEOX_BUILD_TESTS=ON
+```
+
+Available CMake options:
+
+- `GEOX_BUILD_EXAMPLES` — build usage examples (default: `ON`)
+- `GEOX_BUILD_TESTS` — build and register CTest tests (default: `ON`)
 
 ## Usage
 

@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.10)
 
 project(geox VERSION 0.1.0 LANGUAGES CXX)
 
+option(GEOX_BUILD_EXAMPLES "Build GEOX examples" OFF)
+option(GEOX_BUILD_TESTS "Build GEOX tests" ON)
+
 set(GEOX_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/geox/predicates.cpp
 
@@ -44,36 +47,11 @@ target_include_directories(${PROJECT_NAME}
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
-add_executable(great_icosahedron_vtk_demo
-    ${CMAKE_CURRENT_SOURCE_DIR}/examples/vtk/great_icosahedron_vtk_demo.cpp
-)
+if(GEOX_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
 
-target_link_libraries(great_icosahedron_vtk_demo
-    PRIVATE
-        ${PROJECT_NAME}
-)
-
-add_executable(annular_disk_vtk_demo
-    ${CMAKE_CURRENT_SOURCE_DIR}/examples/vtk/annular_disk_vtk_demo.cpp
-)
-
-target_link_libraries(annular_disk_vtk_demo
-    PRIVATE
-        ${PROJECT_NAME}
-)
-
-add_custom_target(generate_great_icosahedron_vtk
-    COMMAND $<TARGET_FILE:great_icosahedron_vtk_demo>
-            ${CMAKE_CURRENT_BINARY_DIR}/great_icosahedron.vtk
-    DEPENDS great_icosahedron_vtk_demo
-    COMMENT "Generating great_icosahedron.vtk"
-    VERBATIM
-)
-
-add_custom_target(generate_annular_disk_vtk
-    COMMAND $<TARGET_FILE:annular_disk_vtk_demo>
-            ${CMAKE_CURRENT_BINARY_DIR}/annular_disk.vtk
-    DEPENDS annular_disk_vtk_demo
-    COMMENT "Generating annular disk VTK"
-    VERBATIM
-)
+if(GEOX_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
