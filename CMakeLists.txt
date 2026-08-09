@@ -38,3 +38,20 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+
+add_executable(great_icosahedron_vtk_demo
+    ${CMAKE_CURRENT_SOURCE_DIR}/examples/geometry/great_icosahedron_vtk_demo.cpp
+)
+
+target_link_libraries(great_icosahedron_vtk_demo
+    PRIVATE
+        ${PROJECT_NAME}
+)
+
+add_custom_target(generate_great_icosahedron_vtk
+    COMMAND $<TARGET_FILE:great_icosahedron_vtk_demo>
+            ${CMAKE_CURRENT_BINARY_DIR}/great_icosahedron.vtk
+    DEPENDS great_icosahedron_vtk_demo
+    COMMENT "Generating great_icosahedron.vtk"
+    VERBATIM
+)
