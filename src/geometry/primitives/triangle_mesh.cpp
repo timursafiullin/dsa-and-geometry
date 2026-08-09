@@ -40,9 +40,10 @@ namespace dsa::geometry
         return static_cast<VertexId>(vertices_.size() - 1);
     }
 
-    void TriangleMesh::addTriangle(const TriangleIndices& indices)
+    TriangleId TriangleMesh::addTriangle(const TriangleIndices& indices)
     {
         triangles_.push_back(indices);
+        return triangles_.size() - 1;
     }
 
     std::size_t TriangleMesh::vertexCount() const noexcept { return vertices_.size(); }

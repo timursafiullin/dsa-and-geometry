@@ -29,7 +29,7 @@ namespace dsa::geometry
         const TriangleIndices& triangle(TriangleId index) const;
 
         VertexId addVertex(const Point3& vertex);
-        void addTriangle(const TriangleIndices& indices);
+        TriangleId addTriangle(const TriangleIndices& indices);
 
         std::size_t vertexCount() const noexcept;
         std::size_t triangleCount() const noexcept;
