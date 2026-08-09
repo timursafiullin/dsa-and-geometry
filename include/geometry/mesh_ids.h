@@ -20,4 +20,4 @@ namespace dsa::geometry
     inline constexpr HalfEdgeId InvalidHalfEdgeId =
         std::numeric_limits<HalfEdgeId>::max();
 
-}
+} // namespace dsa::geometry
