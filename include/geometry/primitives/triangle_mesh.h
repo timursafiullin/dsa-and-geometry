@@ -6,11 +6,11 @@
 #include <vector>
 
 #include "geometry/primitives/triangles.h"
+#include "geometry/mesh_ids.h"
 
 namespace dsa::geometry
 {
 
-    using VertexId = std::uint32_t;
     using TriangleIndices = std::array<VertexId, 3>;
 
     class TriangleMesh
@@ -25,8 +25,8 @@ namespace dsa::geometry
         const std::vector<Point3>& vertices() const;
         const std::vector<TriangleIndices>& triangles() const;
 
-        const Point3& vertex(std::size_t index) const;
-        const TriangleIndices& triangle(std::size_t index) const;
+        const Point3& vertex(VertexId index) const;
+        const TriangleIndices& triangle(TriangleId index) const;
 
         VertexId addVertex(const Point3& vertex);
         void addTriangle(const TriangleIndices& indices);
@@ -37,8 +37,8 @@ namespace dsa::geometry
         bool isValid() const;
         bool isGeometricallyValid() const;
 
-        double triangleArea(std::size_t index) const;
-        vector3d triangleNormal(std::size_t index) const;
+        double triangleArea(TriangleId index) const;
+        vector3d triangleNormal(TriangleId index) const;
 
     private:
         bool hasValidIndices() const;

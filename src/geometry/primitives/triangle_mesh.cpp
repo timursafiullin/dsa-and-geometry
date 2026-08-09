@@ -21,12 +21,12 @@ namespace dsa::geometry
         return triangles_;
     }
 
-    const Point3& TriangleMesh::vertex(std::size_t index) const
+    const Point3& TriangleMesh::vertex(VertexId index) const
     {
         return vertices_.at(index);
     }
 
-    const TriangleIndices& TriangleMesh::triangle(std::size_t index) const
+    const TriangleIndices& TriangleMesh::triangle(TriangleId index) const
     {
         return triangles_.at(index);
     }
@@ -61,7 +61,7 @@ namespace dsa::geometry
                !hasDegenerateTriangles();
     }
 
-    double TriangleMesh::triangleArea(std::size_t index) const
+    double TriangleMesh::triangleArea(TriangleId index) const
     {
         const TriangleIndices& indices = triangles_.at(index);
         return dsa::geometry::triangleArea(
@@ -71,7 +71,7 @@ namespace dsa::geometry
         );
     }
 
-    vector3d TriangleMesh::triangleNormal(std::size_t index) const
+    vector3d TriangleMesh::triangleNormal(TriangleId index) const
     {
         const TriangleIndices& indices = triangles_.at(index);
         return Triangle3(
