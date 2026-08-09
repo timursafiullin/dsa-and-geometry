@@ -8,6 +8,7 @@
 namespace dsa::geometry
 {
 
+    // MARK: Edge
     Edge::Edge(VertexId firstVertex, VertexId secondVertex)
         : first_(std::min(firstVertex, secondVertex))
         , second_(std::max(firstVertex, secondVertex))
@@ -42,6 +43,7 @@ namespace dsa::geometry
     }
 
 
+    // MARK: EdgeHash
     std::size_t EdgeHash::operator()(const Edge& edge) const noexcept
     {
         const std::uint64_t key =
