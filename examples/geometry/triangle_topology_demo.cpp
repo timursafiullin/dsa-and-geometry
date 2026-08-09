@@ -2,10 +2,12 @@
 #include "geometry/topology/boundary.h"
 #include "geometry/topology/edge.h"
 #include "geometry/topology/half_edge_topology.h"
+#include "geometry/topology/orientation.h"
 #include "geometry/topology/triangle_topology.h"
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
 #include <iostream>
 #include <stdexcept>
 #include <vector>
@@ -170,6 +172,12 @@ namespace
         assert(topology.triangleNeighbors(secondTriangle)[0] == InvalidTriangleId);
         assert(topology.triangleNeighbors(thirdTriangle)[0] == InvalidTriangleId);
 
+        const OrientationAnalysis orientation = analyzeOrientation(mesh, topology);
+        assert(!orientation.orientable);
+        assert(!orientation.consistentlyOriented);
+        assert(orientation.connectedComponents == 1);
+        assert(!isConsistentlyOriented(mesh, topology));
+
         bool rejectedNonManifoldHalfEdgeTopology = false;
         try
         {
@@ -183,7 +191,7 @@ namespace
         assert(rejectedNonManifoldHalfEdgeTopology);
     }
 
-    void verifyInconsistentOrientationIsRejected()
+    void verifyOrientationCorrection()
     {
         const TriangleMesh square{
             {
@@ -197,6 +205,23 @@ namespace
         };
 
         const TriangleTopology topology = buildTriangleTopology(square);
+        const EdgeId diagonal = findEdgeId(topology, Edge{0, 2});
+
+        assert(!areAdjacentTrianglesConsistentlyOriented(
+            square,
+            0,
+            1,
+            diagonal,
+            topology
+        ));
+        assert(!isConsistentlyOriented(square, topology));
+
+        const OrientationAnalysis analysis = analyzeOrientation(square, topology);
+
+        assert(analysis.orientable);
+        assert(!analysis.consistentlyOriented);
+        assert(analysis.connectedComponents == 1);
+        assert((analysis.flipTriangles == std::vector<std::uint8_t>{0, 1}));
 
         bool rejectedInconsistentOrientation = false;
         try
@@ -209,6 +234,16 @@ namespace
             rejectedInconsistentOrientation = true;
         }
         assert(rejectedInconsistentOrientation);
+
+        TriangleMesh orientedSquare = square;
+        applyOrientation(orientedSquare, analysis);
+
+        const TriangleTopology orientedTopology =
+            buildTriangleTopology(orientedSquare);
+
+        assert(isConsistentlyOriented(orientedSquare, orientedTopology));
+        [[maybe_unused]] const HalfEdgeTopology halfEdges =
+            buildHalfEdgeTopology(orientedSquare, orientedTopology);
     }
 
     void verifyIcosahedronTopology()
@@ -321,7 +356,7 @@ int main()
     verifyEdge();
     verifyManifoldTopology();
     verifyNonManifoldTopology();
-    verifyInconsistentOrientationIsRejected();
+    verifyOrientationCorrection();
     verifyIcosahedronTopology();
     verifyInvalidMeshIsRejected();
 

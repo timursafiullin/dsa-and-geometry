@@ -1,8 +1,10 @@
 #include "geometry/io/vtk.h"
 #include "geometry/primitives/triangle_mesh.h"
+#include "geometry/topology/orientation.h"
 #include "geometry/topology/triangle_topology.h"
 
 #include <cassert>
+#include <cmath>
 #include <iostream>
 #include <string>
 
@@ -49,6 +51,22 @@ namespace
         assert(topology.edgeCount() == 30);
         assert(topology.triangleCount() == 20);
         assert(topology.isManifold());
+
+        const OrientationAnalysis orientation = analyzeOrientation(mesh, topology);
+        assert(orientation.orientable);
+        assert(orientation.consistentlyOriented);
+        assert(orientation.connectedComponents == 1);
+        assert(isConsistentlyOriented(mesh, topology));
+        assert(isClosed(topology));
+
+        const double volume = signedVolume(mesh);
+        assert(volume != 0.0);
+
+        TriangleMesh reversed = mesh;
+        reverseOrientation(reversed);
+        const TriangleTopology reversedTopology = buildTriangleTopology(reversed);
+        assert(isConsistentlyOriented(reversed, reversedTopology));
+        assert(std::abs(volume + signedVolume(reversed)) < 1e-12);
 
         for (VertexId vertexId = 0; vertexId < topology.vertexCount(); ++vertexId)
             assert(topology.incidentTriangles(vertexId).size() == 5);

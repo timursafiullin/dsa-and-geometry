@@ -2,11 +2,13 @@
 #include "geometry/primitives/triangle_mesh.h"
 #include "geometry/topology/boundary.h"
 #include "geometry/topology/half_edge_topology.h"
+#include "geometry/topology/orientation.h"
 #include "geometry/topology/triangle_topology.h"
 
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <cstdint>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -90,6 +92,24 @@ namespace
         assert(topology.triangleCount() == 2 * kSegments);
         assert(topology.edgeCount() == 4 * kSegments);
         assert(topology.vertexCount() - topology.edgeCount() + topology.triangleCount() == 0);
+
+        const OrientationAnalysis orientation = analyzeOrientation(mesh, topology);
+        assert(orientation.orientable);
+        assert(orientation.consistentlyOriented);
+        assert(orientation.connectedComponents == 1);
+        assert(std::all_of(
+            orientation.flipTriangles.begin(),
+            orientation.flipTriangles.end(),
+            [](std::uint8_t flip) { return flip == 0; }
+        ));
+        assert(isConsistentlyOriented(mesh, topology));
+        assert(!isClosed(topology));
+        assert(signedVolume(mesh) == 0.0);
+
+        TriangleMesh reversed = mesh;
+        reverseOrientation(reversed);
+        const TriangleTopology reversedTopology = buildTriangleTopology(reversed);
+        assert(isConsistentlyOriented(reversed, reversedTopology));
 
         const std::vector<EdgeId> edges = boundaryEdges(topology);
         const std::vector<VertexId> vertices = boundaryVertices(topology);
