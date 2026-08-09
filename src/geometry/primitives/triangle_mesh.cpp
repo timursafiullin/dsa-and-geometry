@@ -2,6 +2,7 @@
 
 #include <limits>
 #include <stdexcept>
+#include <utility>
 
 namespace dsa::geometry
 {
@@ -44,6 +45,12 @@ namespace dsa::geometry
     {
         triangles_.push_back(indices);
         return triangles_.size() - 1;
+    }
+
+    void TriangleMesh::reverseTriangleOrientation(TriangleId triangleId)
+    {
+        TriangleIndices& indices = triangles_.at(triangleId);
+        std::swap(indices[1], indices[2]);
     }
 
     std::size_t TriangleMesh::vertexCount() const noexcept { return vertices_.size(); }

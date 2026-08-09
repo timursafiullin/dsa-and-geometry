@@ -31,6 +31,8 @@ namespace dsa::geometry
         VertexId addVertex(const Point3& vertex);
         TriangleId addTriangle(const TriangleIndices& indices);
 
+        void reverseTriangleOrientation(TriangleId triangleId);
+
         std::size_t vertexCount() const noexcept;
         std::size_t triangleCount() const noexcept;
 
