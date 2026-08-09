@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project(geox VERSION 0.1.0 LANGUAGES CXX)
 
-option(GEOX_BUILD_EXAMPLES "Build GEOX examples" OFF)
+option(GEOX_BUILD_EXAMPLES "Build GEOX examples" ON)
 option(GEOX_BUILD_TESTS "Build GEOX tests" ON)
 
 set(GEOX_SOURCES
