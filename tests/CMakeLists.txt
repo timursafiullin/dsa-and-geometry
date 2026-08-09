@@ -2,6 +2,7 @@ add_executable(geox_tests
     test_main.cpp
     primitives_test.cpp
     algorithms_test.cpp
+    spatial_test.cpp
     topology_test.cpp
     vtk_test.cpp
 )

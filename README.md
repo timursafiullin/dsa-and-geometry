@@ -1,6 +1,6 @@
 # GEOX
 
-GEOX is a C++ geometry library. The `geox` namespace provides 2D and 3D primitives, algorithms, mesh topology, and VTK I/O tools.
+GEOX is a C++ geometry library. The `geox` namespace provides 2D and 3D primitives, algorithms, mesh topology, spatial queries, and VTK I/O tools.
 
 ### Primitives
 
@@ -23,6 +23,13 @@ GEOX is a C++ geometry library. The `geox` namespace provides 2D and 3D primitiv
 - [3D segments](include/geox/algorithms/segment3.h): point-on-segment test, closest point, squared distance, and intersection of coplanar or collinear segments; skew segments do not intersect
 - [2D triangles](include/geox/algorithms/triangle2.h): barycentric coordinates and point-in-triangle test
 - [3D triangles](include/geox/algorithms/triangle3.h): barycentric coordinates, point-in-triangle test, closest point on the triangle, and closest point on its boundary edges
+- [Triangle meshes](include/geox/algorithms/triangle_mesh.h): exact linear closest-point query over all mesh triangles
+
+### Spatial queries
+
+- [AABB](include/geox/spatial/aabb.h): 2D and 3D axis-aligned bounding boxes, point containment, overlap tests, merging, and squared distance lower bounds
+- [Bounds](include/geox/spatial/bounds.h): bounding boxes for segments, triangles, individual mesh triangles, and complete triangle meshes
+- [Triangle BVH](include/geox/spatial/triangle_bvh.h): a flat bounding-volume hierarchy for nearest-point queries and AABB-overlap candidate search over a `TriangleMesh`
 
 ### Mesh I/O
 
@@ -133,6 +140,55 @@ std::vector<BoundaryLoop> loops = extractBoundaryLoops(mesh, halfEdges);
 bool closed = isClosed(topology);
 double volume = signedVolume(mesh);
 ```
+
+### Triangle-mesh spatial queries
+
+`TriangleBVH` accelerates the same nearest-point query implemented by
+`closestPointOnMesh`. The BVH is non-owning: keep the mesh alive and rebuild
+the index after changing coordinates of indexed vertices or adding/removing
+triangles.
+
+```cpp
+#include "geox/primitives/triangle_mesh.h"
+#include "geox/spatial/aabb.h"
+#include "geox/spatial/bounds.h"
+#include "geox/spatial/triangle_bvh.h"
+
+#include <optional>
+#include <vector>
+
+using namespace geox;
+
+TriangleMesh mesh{
+    {
+        Point3{0.0, 0.0, 0.0}, Point3{1.0, 0.0, 0.0},
+        Point3{1.0, 1.0, 0.0}, Point3{0.0, 1.0, 0.0},
+        Point3{0.0, 0.0, 1.0}, Point3{1.0, 0.0, 1.0},
+        Point3{1.0, 1.0, 1.0}, Point3{0.0, 1.0, 1.0},
+    },
+    {
+        TriangleIndices{0, 2, 1}, TriangleIndices{0, 3, 2},
+        TriangleIndices{4, 5, 6}, TriangleIndices{4, 6, 7},
+        TriangleIndices{0, 1, 5}, TriangleIndices{0, 5, 4},
+        TriangleIndices{1, 2, 6}, TriangleIndices{1, 6, 5},
+        TriangleIndices{2, 3, 7}, TriangleIndices{2, 7, 6},
+        TriangleIndices{3, 0, 4}, TriangleIndices{3, 4, 7},
+    },
+};
+
+TriangleBVH bvh = buildTriangleBVH(mesh);
+const std::optional<ClosestPointOnMeshResult> closest =
+    bvh.closestPoint(Point3{1.7, 0.3, 0.6});
+
+const std::optional<AABB3> meshBounds = boundingBox(mesh);
+const std::vector<TriangleId> candidates = bvh.overlapCandidates(
+    AABB3{Point3{0.95, 0.2, 0.2}, Point3{1.05, 0.8, 0.8}}
+);
+```
+
+`closest` contains the closest point, its squared distance, and the source
+triangle ID. `candidates` are conservative: their bounding boxes overlap the
+query box, while the triangles themselves may not.
 
 ### Kepler–Poinsot polyhedron: great icosahedron
 

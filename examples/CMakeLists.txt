@@ -4,6 +4,7 @@ set(GEOX_EXAMPLE_SOURCES
     primitives/triangle_mesh_demo.cpp
     primitives/triangles_demo.cpp
     primitives/vectors_demo.cpp
+    spatial/triangle_bvh_demo.cpp
     topology/triangle_topology_demo.cpp
     vtk/annular_disk_vtk_demo.cpp
     vtk/great_icosahedron_vtk_demo.cpp

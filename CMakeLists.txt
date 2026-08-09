@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(geox VERSION 0.1.0 LANGUAGES CXX)
+project(geox VERSION 0.2.0 LANGUAGES CXX)
 
 option(GEOX_BUILD_EXAMPLES "Build GEOX examples" ON)
 option(GEOX_BUILD_TESTS "Build GEOX tests" ON)
@@ -20,6 +20,12 @@ set(GEOX_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/geox/algorithms/segment3.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/geox/algorithms/triangle2.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/geox/algorithms/triangle3.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/geox/algorithms/triangle_mesh.cpp
+
+    # Spatial
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/geox/spatial/aabb.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/geox/spatial/bounds.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/geox/spatial/triangle_bvh.cpp
 
     # I/O
     ${CMAKE_CURRENT_SOURCE_DIR}/src/geox/io/vtk.cpp
