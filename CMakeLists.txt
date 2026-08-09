@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(geox VERSION 0.0.1 LANGUAGES CXX)
+project(geox VERSION 0.1.0 LANGUAGES CXX)
 
 set(GEOX_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/geox/predicates.cpp
