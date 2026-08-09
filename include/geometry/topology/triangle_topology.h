@@ -25,6 +25,10 @@ namespace dsa::geometry
     class TriangleTopology
     {
     public:
+        // For triangle vertices [v0, v1, v2], local edges are:
+        // 0: (v0, v1), 1: (v1, v2), 2: (v2, v0).
+        // triangleEdges_[triangleId][i] and triangleNeighbors_[triangleId][i]
+        // describe the same local edge i.
         using TriangleEdges = std::array<EdgeId, 3>;
         using TriangleNeighbors = std::array<TriangleId, 3>;
 
