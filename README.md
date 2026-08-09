@@ -28,6 +28,9 @@ The `dsa::geometry` namespace contains 2D and 3D geometry primitives and algorit
 ### Mesh topology
 
 - [Triangle topology](include/geometry/topology/triangle_topology.h): edges, triangle adjacency, incident triangles, boundary and non-manifold edge detection
+- [Orientation analysis](include/geometry/topology/orientation.h): checks orientability and winding consistency, creates and applies a face-flip plan, reverses mesh orientation, detects closed meshes, and calculates signed volume
+- [Half-edge topology](include/geometry/topology/half_edge_topology.h): directed per-face edges with `next`, `previous`, and `twin` navigation, plus origin and destination vertices. It is available for manifold meshes whose adjacent triangles are consistently oriented.
+- [Boundary utilities](include/geometry/topology/boundary.h): collects boundary vertices and edges and extracts ordered, closed boundary loops from a half-edge topology
 
 ### Algorithms
 
@@ -97,6 +100,39 @@ TriangleMesh mesh{
 TriangleTopology topology = buildTriangleTopology(mesh);
 bool manifold = topology.isManifold();
 std::size_t edgeCount = topology.edgeCount();
+```
+
+### Mesh orientation and boundaries
+
+Analyze a manifold mesh before building its half-edge representation. If its face
+winding is inconsistent, apply the returned correction plan and rebuild the
+triangle topology. Boundary loops are available for open, consistently oriented
+manifold meshes.
+
+```cpp
+#include "geometry/topology/boundary.h"
+#include "geometry/topology/half_edge_topology.h"
+#include "geometry/topology/orientation.h"
+
+#include <stdexcept>
+#include <vector>
+
+using namespace dsa::geometry;
+
+TriangleTopology topology = buildTriangleTopology(mesh);
+OrientationAnalysis orientation = analyzeOrientation(mesh, topology);
+
+if (!orientation.orientable)
+    throw std::runtime_error("Mesh cannot be consistently oriented");
+
+applyOrientation(mesh, orientation);
+topology = buildTriangleTopology(mesh);
+
+HalfEdgeTopology halfEdges = buildHalfEdgeTopology(mesh, topology);
+std::vector<BoundaryLoop> loops = extractBoundaryLoops(mesh, halfEdges);
+
+bool closed = isClosed(topology);
+double volume = signedVolume(mesh);
 ```
 
 ### Kepler–Poinsot polyhedron: great icosahedron
