@@ -1,13 +1,14 @@
-#include "geox/primitives/segments.h"
+#include "geox/geox.h"
 
 #include <iostream>
 
-using namespace geox;
+namespace gx2 = geox::dim2;
+namespace gx3 = geox::dim3;
 
 int main()
 {
-    const Segment2 path{Point2{1.0, 1.0}, Point2{7.0, 5.0}};
-    const Segment3 vertical{Point3{}, Point3{0.0, 0.0, 10.0}};
+    const gx2::Segment path{gx2::Point{1.0, 1.0}, gx2::Point{7.0, 5.0}};
+    const gx3::Segment vertical{gx3::Point{}, gx3::Point{0.0, 0.0, 10.0}};
 
     std::cout << "2D path: " << path.start() << " -> " << path.end() << '\n';
     std::cout << "length: " << path.length() << ", midpoint: " << path.pointAt(0.5) << '\n';
