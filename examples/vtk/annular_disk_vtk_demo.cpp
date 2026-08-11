@@ -1,11 +1,11 @@
-#include "geox/io/vtk.h"
-#include "geox/primitives/triangle_mesh.h"
+#include "geox/geox.h"
 
 #include <cmath>
 #include <iostream>
 #include <string>
 
-using namespace geox;
+namespace gx2 = geox::dim2;
+namespace gx3 = geox::dim3;
 
 namespace
 {
@@ -14,16 +14,16 @@ namespace
     constexpr double kInnerRadius = 0.75;
     constexpr double kPi = 3.14159265358979323846;
 
-    TriangleMesh makeAnnularDisk()
+    gx3::TriangleMesh makeAnnularDisk()
     {
-        TriangleMesh mesh;
+        gx3::TriangleMesh mesh;
 
         for (std::size_t index = 0; index < kSegments; ++index)
         {
             const double angle = 2.0 * kPi * index / kSegments;
             const double x = std::cos(angle);
             const double y = std::sin(angle);
-            mesh.addVertex(Point3{kOuterRadius * x, kOuterRadius * y, 0.0});
+            mesh.addVertex(gx3::Point{kOuterRadius * x, kOuterRadius * y, 0.0});
         }
 
         for (std::size_t index = 0; index < kSegments; ++index)
@@ -31,15 +31,15 @@ namespace
             const double angle = 2.0 * kPi * index / kSegments;
             const double x = std::cos(angle);
             const double y = std::sin(angle);
-            mesh.addVertex(Point3{kInnerRadius * x, kInnerRadius * y, 0.0});
+            mesh.addVertex(gx3::Point{kInnerRadius * x, kInnerRadius * y, 0.0});
         }
 
         for (std::size_t index = 0; index < kSegments; ++index)
         {
-            const VertexId outer = index;
-            const VertexId nextOuter = (index + 1) % kSegments;
-            const VertexId inner = kSegments + index;
-            const VertexId nextInner = kSegments + (index + 1) % kSegments;
+            const gx3::VertexId outer = index;
+            const gx3::VertexId nextOuter = (index + 1) % kSegments;
+            const gx3::VertexId inner = kSegments + index;
+            const gx3::VertexId nextInner = kSegments + (index + 1) % kSegments;
             mesh.addTriangle({outer, nextOuter, nextInner});
             mesh.addTriangle({outer, nextInner, inner});
         }

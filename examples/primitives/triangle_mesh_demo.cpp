@@ -1,16 +1,17 @@
-#include "geox/primitives/triangle_mesh.h"
+#include "geox/geox.h"
 
 #include <iostream>
 
-using namespace geox;
+namespace gx2 = geox::dim2;
+namespace gx3 = geox::dim3;
 
 int main()
 {
-    TriangleMesh square;
-    const VertexId bottomLeft = square.addVertex(Point3{0.0, 0.0, 0.0});
-    const VertexId bottomRight = square.addVertex(Point3{1.0, 0.0, 0.0});
-    const VertexId topRight = square.addVertex(Point3{1.0, 1.0, 0.0});
-    const VertexId topLeft = square.addVertex(Point3{0.0, 1.0, 0.0});
+    gx3::TriangleMesh square;
+    const gx3::VertexId bottomLeft = square.addVertex(gx3::Point{0.0, 0.0, 0.0});
+    const gx3::VertexId bottomRight = square.addVertex(gx3::Point{1.0, 0.0, 0.0});
+    const gx3::VertexId topRight = square.addVertex(gx3::Point{1.0, 1.0, 0.0});
+    const gx3::VertexId topLeft = square.addVertex(gx3::Point{0.0, 1.0, 0.0});
 
     square.addTriangle({bottomLeft, bottomRight, topRight});
     square.addTriangle({bottomLeft, topRight, topLeft});
